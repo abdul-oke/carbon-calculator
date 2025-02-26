@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbon Footprint Calculator</title>
+    <script defer src="script.js"></script>
+</head>
+<body style="font-family: Arial, sans-serif; text-align: center; background-color: #eef7f2; padding: 20px;">
+
+    <div style="max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 10px; 
+                box-shadow: 0px 4px 10px rgba(0,0,0,0.1);">
+        <h2 style="color: #2d6a4f;">🌍 Carbon Footprint Calculator</h2>
+
+        <label>🚗 How far do you travel daily? (km)</label>
+        <input type="number" id="transport_km" placeholder="E.g., 10 km">
+
+        <label>🚌 How do you travel?</label>
+        <select id="transport_mode">
+            <option value="car">Car</option>
+            <option value="bus">Bus</option>
+            <option value="bike">Bike/Walk (No pollution!)</option>
+        </select>
+
+        <label>🥤 Plastic bottles used per day:</label>
+        <input type="number" id="plastic_bottles" placeholder="E.g., 2 bottles">
+
+        <label>💡 Hours of electricity used daily:</label>
+        <input type="number" id="electricity_kwh" placeholder="E.g., 5 hours">
+
+        <label>🍽️ What do you mostly eat?</label>
+        <select id="diet_type">
+            <option value="meat">Meat & Dairy</option>
+            <option value="vegetarian">Vegetarian</option>
+            <option value="vegan">Vegan (Lowest Carbon!)</option>
+        </select>
+
+        <button onclick="calculateFootprint()">Calculate My Impact</button>
+
+        <h3 id="result"></h3>
+    </div>
+
+</body>
+</html>
