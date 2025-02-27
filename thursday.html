@@ -3,40 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thursday - Carbon Footprint</title>
+    <title>Carbon Footprint - Thursday</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
     <div class="container">
-        <h2>🌍 Thursday - Carbon Footprint</h2>
+        <h2>🌍 Thursday's Carbon Footprint</h2>
 
-        <label>🚗 Distance traveled (km):</label>
+        <label>🚗 Travel Distance (km)</label>
         <input type="number" id="transport_km">
 
-        <label>🚌 Transport mode:</label>
+        <label>🚌 Transport Mode</label>
         <select id="transport_mode">
             <option value="car">Car</option>
             <option value="bus">Bus</option>
-            <option value="bike">Bike/Walk</option>
+            <option value="bike">Bike/Walk (No pollution!)</option>
         </select>
 
-        <label>🥤 Plastic bottles used:</label>
+        <label>🥤 Plastic Bottles Used</label>
         <input type="number" id="plastic_bottles">
 
-        <label>💡 Electricity (kWh):</label>
+        <label>💡 Electricity Usage (kWh)</label>
         <input type="number" id="electricity_kwh">
 
-        <label>🍽️ Diet type:</label>
+        <label>🍽️ Diet Type</label>
         <select id="diet_type">
             <option value="meat">Meat & Dairy</option>
             <option value="vegetarian">Vegetarian</option>
-            <option value="vegan">Vegan</option>
+            <option value="vegan">Vegan (Lowest Carbon!)</option>
         </select>
 
-        <button onclick="calculateFootprint()">Next →</button>
-        <p id="result"></p>
+        <button onclick="saveFootprint('thursday', 'friday.html')">Next ➡️</button>
     </div>
-
-    <script src="script.js"></script>
 </body>
 </html>
