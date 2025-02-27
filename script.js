@@ -1,6 +1,6 @@
 const CAR_EMISSION = 0.2, BUS_EMISSION = 0.1, PLASTIC_EMISSION = 0.05, ELECTRICITY_EMISSION = 0.4;
 const MEAT_DIET = 7, VEG_DIET = 4, VEGAN_DIET = 2.5, TREE_ABSORPTION_DAILY = 21 / 365;
-const AVERAGE_WEEKLY_FOOTPRINT = 150;  // Example: Avg person emits 150 kg CO2 per week
+const AVERAGE_WEEKLY_FOOTPRINT = 150;  // Avg person emits ~150 kg CO2 per week
 
 const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 
@@ -18,17 +18,23 @@ function calculateFootprint() {
     let diet_emission = diet_type === "meat" ? MEAT_DIET : diet_type === "vegetarian" ? VEG_DIET : VEGAN_DIET;
 
     let daily_footprint = transport_emission + plastic_emission + electricity_emission + diet_emission;
-    
+
     let currentDay = getCurrentDay();
-    localStorage.setItem(currentDay, daily_footprint);
-    
+    localStorage.setItem(currentDay, daily_footprint.toFixed(2));
+
     let nextDay = getNextDay(currentDay);
-    
+
     if (nextDay) {
         localStorage.setItem("currentDay", nextDay);
-        window.location.href = nextDay + ".html";  // Redirect to next day
+        console.log(`Redirecting to: ${nextDay}.html`);  // Debugging
+        setTimeout(() => {
+            window.location.href = `${nextDay}.html`;
+        }, 500);
     } else {
-        window.location.href = "summary.html";  // Redirect to final results
+        console.log("Redirecting to summary.html");
+        setTimeout(() => {
+            window.location.href = "summary.html";
+        }, 500);
     }
 }
 
@@ -40,3 +46,8 @@ function getNextDay(currentDay) {
     let index = days.indexOf(currentDay);
     return index < 6 ? days[index + 1] : null;
 }
+
+window.onload = function () {
+    let currentDay = getCurrentDay();
+    console.log(`Current Day Loaded: ${currentDay}`);
+};
