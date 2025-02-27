@@ -3,42 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carbon Footprint Calculator</title>
+    <title>Weekly Carbon Footprint Tracker</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
     <div class="container">
-        <h2>🌍 Carbon Footprint Calculator</h2>
+        <h2>🌍 Weekly Carbon Footprint Tracker</h2>
 
-        <label>🚗 How far do you travel daily? (km)</label>
-        <input type="number" id="transport_km" placeholder="E.g., 10 km">
+        <p>Enter your estimated carbon footprint (kg CO2) for each day:</p>
 
-        <label>🚌 How do you travel?</label>
-        <select id="transport_mode">
-            <option value="car">Car</option>
-            <option value="bus">Bus</option>
-            <option value="bike">Bike/Walk (No pollution!)</option>
-        </select>
+        <label>Monday:</label> <input type="number" id="mon" placeholder="e.g., 10">
+        <label>Tuesday:</label> <input type="number" id="tue" placeholder="e.g., 8">
+        <label>Wednesday:</label> <input type="number" id="wed" placeholder="e.g., 9">
+        <label>Thursday:</label> <input type="number" id="thu" placeholder="e.g., 7">
+        <label>Friday:</label> <input type="number" id="fri" placeholder="e.g., 10">
+        <label>Saturday:</label> <input type="number" id="sat" placeholder="e.g., 5">
+        <label>Sunday:</label> <input type="number" id="sun" placeholder="e.g., 6">
 
-        <label>🥤 Plastic bottles used per day:</label>
-        <input type="number" id="plastic_bottles" placeholder="E.g., 2 bottles">
-
-        <label>💡 Hours of electricity used daily:</label>
-        <input type="number" id="electricity_kwh" placeholder="E.g., 5 hours">
-
-        <label>🍽️ What do you mostly eat?</label>
-        <select id="diet_type">
-            <option value="meat">Meat & Dairy</option>
-            <option value="vegetarian">Vegetarian</option>
-            <option value="vegan">Vegan (Lowest Carbon!)</option>
-        </select>
-
-        <button onclick="calculateFootprint()">Calculate My Impact</button>
+        <button onclick="calculateWeeklyFootprint()">Calculate Weekly Footprint</button>
+        <button onclick="resetData()" class="reset">Reset Data</button>
 
         <h3 id="result"></h3>
+
+        <canvas id="barChart"></canvas>
+        <canvas id="lineChart"></canvas>
     </div>
+
+    <script src="script.js"></script>
+    <script src="chart.js"></script>
 
 </body>
 </html>
