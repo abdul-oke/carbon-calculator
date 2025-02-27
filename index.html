@@ -3,36 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weekly Carbon Footprint Tracker</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Carbon Footprint Tracker</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #eef7f2; }
+        .container { max-width: 400px; margin: auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0px 4px 10px rgba(0,0,0,0.1); }
+        button { width: 100%; padding: 12px; background-color: #2d6a4f; color: white; border: none; margin-top: 15px; border-radius: 5px; cursor: pointer; font-size: 16px; }
+    </style>
 </head>
 <body>
-
     <div class="container">
-        <h2>🌍 Weekly Carbon Footprint Tracker</h2>
-
-        <p>Enter your estimated carbon footprint (kg CO2) for each day:</p>
-
-        <label>Monday:</label> <input type="number" id="mon" placeholder="e.g., 10">
-        <label>Tuesday:</label> <input type="number" id="tue" placeholder="e.g., 8">
-        <label>Wednesday:</label> <input type="number" id="wed" placeholder="e.g., 9">
-        <label>Thursday:</label> <input type="number" id="thu" placeholder="e.g., 7">
-        <label>Friday:</label> <input type="number" id="fri" placeholder="e.g., 10">
-        <label>Saturday:</label> <input type="number" id="sat" placeholder="e.g., 5">
-        <label>Sunday:</label> <input type="number" id="sun" placeholder="e.g., 6">
-
-        <button onclick="calculateWeeklyFootprint()">Calculate Weekly Footprint</button>
-        <button onclick="resetData()" class="reset">Reset Data</button>
-
-        <h3 id="result"></h3>
-
-        <canvas id="barChart"></canvas>
-        <canvas id="lineChart"></canvas>
+        <h2>🌱 Weekly Carbon Footprint Tracker</h2>
+        <p>Track your daily carbon footprint and see how you compare by the end of the week.</p>
+        <button onclick="startTracking()">Start Now</button>
     </div>
 
-    <script src="script.js"></script>
-    <script src="chart.js"></script>
-
+    <script>
+        function startTracking() {
+            localStorage.clear();  // Reset data for a new week
+            localStorage.setItem("currentDay", "Monday");
+            window.location.href = "monday.html";  // Redirect to Monday
+        }
+    </script>
 </body>
 </html>

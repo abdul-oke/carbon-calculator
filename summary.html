@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Summary</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>🌱 Weekly Carbon Footprint Report</h2>
+        <p id="summary"></p>
+        <button onclick="restart()">Start New Week</button>
+    </div>
+
+    <script>
+        function calculateWeeklyFootprint() {
+            const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+            let total = 0;
+
+            days.forEach(day => {
+                total += parseFloat(localStorage.getItem(day)) || 0;
+            });
+
+            let comparison = total > AVERAGE_WEEKLY_FOOTPRINT ? 
+                `Your footprint is higher than the average person! Try using public transport or reducing plastic waste.` :
+                `Great job! Your footprint is lower than the average person. Keep it up!`;
+
+            document.getElementById("summary").innerHTML = `Total Weekly Footprint: <b>${total.toFixed(2)} kg CO2</b><br>${comparison}`;
+        }
+
+        function restart() {
+            localStorage.clear();
+            window.location.href = "index.html";
+        }
+
+        window.onload = calculateWeeklyFootprint;
+    </script>
+</body>
+</html>
