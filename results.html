@@ -3,15 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weekly Carbon Footprint Report</title>
+    <title>Weekly Report</title>
     <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
 </head>
-<body onload="calculateWeeklyFootprint()">
+<body>
     <div class="container">
-        <h2>📊 Weekly Carbon Footprint Report</h2>
-        <div id="weekly_result"></div>
-        <button onclick="window.location.href='monday.html'">Restart 🔄</button>
+        <h2>🌍 Weekly Carbon Footprint Report</h2>
+        
+        <button onclick="calculateWeeklyFootprint()">View Report</button>
+
+        <h3 id="weekly_result"></h3>
+        <h3 id="weekly_suggestions"></h3>
     </div>
 </body>
 </html>
