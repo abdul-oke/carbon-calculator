@@ -4,82 +4,125 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weekly Carbon Footprint Report</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e8f5e9;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin: auto;
+        }
+        h2 {
+            color: #2e7d32;
+        }
+        .result {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .tips {
+            text-align: left;
+            margin-top: 20px;
+        }
+        .tips h3 {
+            font-size: 18px;
+            color: #2e7d32;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        ul li {
+            background: #f1f8e9;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .new-week {
+            margin-top: 20px;
+            display: block;
+            text-decoration: none;
+            background: #388e3c;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
+
     <div class="container">
         <h2>🌍 Weekly Carbon Footprint Report</h2>
         <p>Your total carbon footprint for the week:</p>
+        <p class="result"><span id="weeklyTotal">0</span> kg CO2</p>
 
-        <h3 id="weeklyTotal"></h3>
-        <h4 id="comparison"></h4>
+        <p id="feedback"></p>
 
-        <h3>🌱 Tips to Reduce Your Carbon Footprint:</h3>
-        <ul id="tips"></ul>
+        <div class="tips">
+            <h3>🌱 Tips to Reduce Your Carbon Footprint:</h3>
+            <ul id="carbonTips"></ul>
+        </div>
 
-        <a href="monday.html" class="next-button">Start a New Week</a>
+        <a href="monday.html" class="new-week">Start a New Week</a>
     </div>
 
     <script>
         function calculateWeeklyTotal() {
-            let weeklyTotal = 0;
+            let total = 0;
             let dailyFootprints = [];
 
-            // Retrieve data from localStorage for each day
-            const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
-            days.forEach(day => {
-                const footprint = localStorage.getItem(day);
-                if (footprint) {
-                    let value = parseFloat(footprint);
-                    dailyFootprints.push(value);
-                    weeklyTotal += value;
+            for (let day of ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]) {
+                let dayValue = localStorage.getItem(day + "_footprint");
+                if (dayValue) {
+                    let footprint = parseFloat(dayValue);
+                    dailyFootprints.push(footprint);
+                    total += footprint;
                 }
-            });
+            }
 
-            // Display total weekly carbon footprint
-            document.getElementById("weeklyTotal").innerHTML = `<b>${weeklyTotal.toFixed(2)} kg CO2</b>`;
+            document.getElementById("weeklyTotal").innerText = total.toFixed(2);
 
-            // Compare to the average carbon footprint (e.g., ~100 kg CO2 per week)
-            const averageCarbonFootprint = 100; // Example value, can be adjusted
-            let comparisonText = weeklyTotal > averageCarbonFootprint
-                ? "⚠️ Your carbon footprint is higher than the average person. Try reducing it!"
-                : "✅ Great job! Your carbon footprint is lower than the average person.";
+            // Compare with the average footprint (100 kg CO2 per week)
+            let feedback = document.getElementById("feedback");
+            if (total < 100) {
+                feedback.innerHTML = "✅ <strong>Great job!</strong> Your carbon footprint is lower than the average person.";
+            } else {
+                feedback.innerHTML = "⚠️ <strong>Try reducing emissions!</strong> Your footprint is higher than average.";
+            }
 
-            document.getElementById("comparison").innerHTML = comparisonText;
-
-            // Generate reduction tips based on user input
             generateReductionTips(dailyFootprints);
         }
 
-        function generateReductionTips(footprints) {
+        function generateReductionTips(dailyFootprints) {
             let tips = [];
 
-            if (footprints.some(f => f > 15)) {
-                tips.push("🚲 Consider using public transport, biking, or walking more.");
+            if (dailyFootprints.some(value => value > 15)) {
+                tips.push("🚗 Use public transport, carpool, or bike for short trips.");
             }
-            if (footprints.some(f => f > 20)) {
-                tips.push("💡 Reduce electricity usage by turning off lights and using energy-efficient appliances.");
+            if (dailyFootprints.some(value => value > 20)) {
+                tips.push("💡 Reduce electricity use with LED bulbs and energy-saving habits.");
             }
-            if (footprints.some(f => f > 10)) {
-                tips.push("🍃 Try eating more plant-based meals to lower your diet's carbon impact.");
+            if (dailyFootprints.some(value => value > 10)) {
+                tips.push("🥤 Avoid single-use plastics by carrying reusable bottles and bags.");
             }
-            if (footprints.some(f => f > 5)) {
-                tips.push("♻️ Reduce plastic waste by using reusable water bottles and bags.");
+            if (dailyFootprints.some(value => value > 25)) {
+                tips.push("🥦 Reduce meat consumption and try plant-based meals.");
+            }
+            if (tips.length === 0) {
+                tips.push("🌍 Keep up the good work! Continue making sustainable choices.");
+            }
 
-            }
-
-            // Display tips
-            const tipsList = document.getElementById("tips");
-            tips.forEach(tip => {
-                let li = document.createElement("li");
-                li.innerText = tip;
-                tipsList.appendChild(li);
-            });
+            document.getElementById("carbonTips").innerHTML = tips.map(tip => `<li>${tip}</li>`).join("");
         }
 
-        // Call function when the page loads
         window.onload = calculateWeeklyTotal;
     </script>
+
 </body>
 </html>
