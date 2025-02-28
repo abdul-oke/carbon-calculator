@@ -1,62 +1,39 @@
-function saveFootprint(day, nextPage) {
-    const data = {
-        transport_km: document.getElementById("transport_km").value || 0,
-        transport_mode: document.getElementById("transport_mode").value,
-        plastic_bottles: document.getElementById("plastic_bottles").value || 0,
-        electricity_kwh: document.getElementById("electricity_kwh").value || 0,
-        diet_type: document.getElementById("diet_type").value
-    };
+function calculateFootprint() {
+    let transportKm = parseFloat(document.getElementById("transport_km").value) || 0;
+    let transportMode = document.getElementById("transport_mode").value;
+    let plasticBottles = parseInt(document.getElementById("plastic_bottles").value) || 0;
+    let electricityKwh = parseFloat(document.getElementById("electricity_kwh").value) || 0;
+    let dietType = document.getElementById("diet_type").value;
 
-    // Save data to localStorage
-    localStorage.setItem(day, JSON.stringify(data));
+    let transportEmission = transportMode === "car" ? transportKm * 0.2 : transportMode === "bus" ? transportKm * 0.1 : 0;
+    let plasticEmission = plasticBottles * 0.05;
+    let electricityEmission = electricityKwh * 0.4;
+    let dietEmission = dietType === "meat" ? 7 : dietType === "vegetarian" ? 4 : 2.5;
 
-    // Navigate to the next page
-    window.location.href = nextPage;
-}
+    let totalFootprint = transportEmission + plasticEmission + electricityEmission + dietEmission;
 
-// Function to calculate the final weekly footprint
-function calculateWeeklyFootprint() {
-    let totalCarbon = 0;
-    const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+    document.getElementById("result").innerHTML = `<b>Your Daily Carbon Footprint:</b> ${totalFootprint.toFixed(2)} kg CO2`;
 
-    days.forEach(day => {
-        const data = JSON.parse(localStorage.getItem(day));
-        if (data) {
-            totalCarbon += calculateDailyFootprint(data);
-        }
-    });
+    // Generate Suggestions
+    let suggestions = [];
 
-    document.getElementById("weekly_result").innerHTML = `
-        <h3>Your Total Weekly Carbon Footprint: ${totalCarbon.toFixed(2)} kg CO2</h3>
-        <p>${compareWithAverage(totalCarbon)}</p>
-    `;
-}
+    if (transportMode === "car" && transportKm > 10) {
+        suggestions.push("🚶‍♂️ Consider walking, biking, or using public transport for short distances.");
+    }
+    if (electricityKwh > 5) {
+        suggestions.push("💡 Reduce electricity use by turning off unused lights and using energy-efficient appliances.");
+    }
+    if (plasticBottles > 2) {
+        suggestions.push("♻️ Use reusable bottles instead of plastic to reduce waste.");
+    }
+    if (dietType === "meat") {
+        suggestions.push("🌱 Try incorporating more plant-based meals to reduce carbon emissions.");
+    }
 
-// Function to calculate daily footprint based on stored data
-function calculateDailyFootprint(data) {
-    const CAR_EMISSION = 0.2;  // per km
-    const BUS_EMISSION = 0.1;  // per km
-    const PLASTIC_EMISSION = 0.05;  // per bottle
-    const ELECTRICITY_EMISSION = 0.4;  // per kWh
-    const MEAT_DIET = 7;
-    const VEG_DIET = 4;
-    const VEGAN_DIET = 2.5;
+    document.getElementById("suggestions").innerHTML = suggestions.length > 0 
+        ? `<b>Ways to Reduce:</b> <ul><li>${suggestions.join("</li><li>")}</li></ul>` 
+        : "✅ You're doing great! Keep it up!";
 
-    let transportEmission = (data.transport_mode === "car" ? data.transport_km * CAR_EMISSION :
-                             data.transport_mode === "bus" ? data.transport_km * BUS_EMISSION : 0);
-                             
-    let plasticEmission = data.plastic_bottles * PLASTIC_EMISSION;
-    let electricityEmission = data.electricity_kwh * ELECTRICITY_EMISSION;
-    let dietEmission = (data.diet_type === "meat" ? MEAT_DIET : 
-                        data.diet_type === "vegetarian" ? VEG_DIET : VEGAN_DIET);
-
-    return transportEmission + plasticEmission + electricityEmission + dietEmission;
-}
-
-// Compare with average
-function compareWithAverage(totalCarbon) {
-    const AVERAGE_WEEKLY = 70;  // Example average
-    return totalCarbon > AVERAGE_WEEKLY ? 
-        "⚠️ Your footprint is higher than the average. Try to reduce it!" : 
-        "✅ Great job! Your footprint is lower than the average!";
+    // Store data in localStorage for weekly summary
+    localStorage.setItem("mondayFootprint", totalFootprint);
 }
