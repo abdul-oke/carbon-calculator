@@ -5,20 +5,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weekly Carbon Footprint Report</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
 </head>
-<body onload="showWeeklyReport()">
+<body>
     <div class="container">
         <h2>🌍 Weekly Carbon Footprint Report</h2>
         <p>Your total carbon footprint for the week:</p>
-        <h3 id="total-footprint">0.00 kg CO2</h3>
+        <h3 id="totalFootprint">0.00 kg CO2</h3>
 
-        <p id="comparison"></p>
+        <!-- Ranking System -->
+        <p id="rankingMessage"></p>
 
-        <h4>🌱 Tips to Reduce Your Carbon Footprint:</h4>
-        <ul id="tips-list"></ul>
+        <!-- Tips Section -->
+        <h3>🌱 Tips to Reduce Your Carbon Footprint:</h3>
+        <ul id="tipsList"></ul>
 
-        <a href="monday.html" class="next-button">Start a New Week</a>
+        <!-- Restart Button -->
+        <a href="index.html">Start a New Week</a>
     </div>
+
+    <script>
+        // Retrieve the weekly total from localStorage
+        let totalFootprint = 0;
+        for (let day of ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]) {
+            totalFootprint += parseFloat(localStorage.getItem(day) || 0);
+        }
+        
+        document.getElementById("totalFootprint").innerText = totalFootprint.toFixed(2) + " kg CO2";
+
+        // Ranking System
+        function getRanking(total) {
+            if (total < 50) return "🌱 Eco-Warrior! You're doing amazing!";
+            if (total < 100) return "🌍 Sustainable Citizen! Keep improving.";
+            return "🚗 Heavy Emitter! Try reducing your emissions.";
+        }
+        
+        document.getElementById("rankingMessage").innerHTML = `<strong>${getRanking(totalFootprint)}</strong>`;
+
+        // Generate Carbon Footprint Reduction Tips
+        let tips = [];
+        if (totalFootprint > 100) tips.push("🚲 Try walking, cycling, or using public transport more often.");
+        if (totalFootprint > 80) tips.push("💡 Reduce electricity usage by switching to LED bulbs.");
+        if (totalFootprint > 60) tips.push("🥦 Reduce red meat consumption to lower food-related emissions.");
+        if (totalFootprint > 40) tips.push("♻️ Try reusing and recycling materials to reduce waste.");
+        
+        let tipsList = document.getElementById("tipsList");
+        if (tips.length === 0) {
+            tipsList.innerHTML = "<li>🎉 You're already doing great!</li>";
+        } else {
+            tips.forEach(tip => {
+                let li = document.createElement("li");
+                li.innerText = tip;
+                tipsList.appendChild(li);
+            });
+        }
+    </script>
 </body>
 </html>
