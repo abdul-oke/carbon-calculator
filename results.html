@@ -20,16 +20,21 @@
         <ul id="tipsList"></ul>
 
         <!-- Restart Button -->
-        <a href="index.html">Start a New Week</a>
+        <button onclick="restartWeek()">Start a New Week</button>
     </div>
 
     <script>
-        // Retrieve the weekly total from localStorage
+        // List of days
+        const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
         let totalFootprint = 0;
-        for (let day of ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]) {
-            totalFootprint += parseFloat(localStorage.getItem(day) || 0);
-        }
-        
+
+        // Retrieve each day's footprint and add to total
+        days.forEach(day => {
+            let dailyValue = parseFloat(localStorage.getItem(day) || "0");
+            totalFootprint += dailyValue;
+        });
+
+        // Display total footprint
         document.getElementById("totalFootprint").innerText = totalFootprint.toFixed(2) + " kg CO2";
 
         // Ranking System
@@ -38,16 +43,15 @@
             if (total < 100) return "🌍 Sustainable Citizen! Keep improving.";
             return "🚗 Heavy Emitter! Try reducing your emissions.";
         }
-        
         document.getElementById("rankingMessage").innerHTML = `<strong>${getRanking(totalFootprint)}</strong>`;
 
-        // Generate Carbon Footprint Reduction Tips
+        // Generate Tips
         let tips = [];
-        if (totalFootprint > 100) tips.push("🚲 Try walking, cycling, or using public transport more often.");
+        if (totalFootprint > 100) tips.push("🚲 Use public transport, walk, or cycle more.");
         if (totalFootprint > 80) tips.push("💡 Reduce electricity usage by switching to LED bulbs.");
         if (totalFootprint > 60) tips.push("🥦 Reduce red meat consumption to lower food-related emissions.");
         if (totalFootprint > 40) tips.push("♻️ Try reusing and recycling materials to reduce waste.");
-        
+
         let tipsList = document.getElementById("tipsList");
         if (tips.length === 0) {
             tipsList.innerHTML = "<li>🎉 You're already doing great!</li>";
@@ -57,6 +61,12 @@
                 li.innerText = tip;
                 tipsList.appendChild(li);
             });
+        }
+
+        // Restart the week (Clear storage)
+        function restartWeek() {
+            localStorage.clear();
+            window.location.href = "index.html";
         }
     </script>
 </body>
