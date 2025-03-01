@@ -3,120 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weekly Carbon Footprint Report</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #eef7f2;
-            padding: 20px;
-        }
-        .container {
-            max-width: 400px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
-        }
-        h2 {
-            color: #2d6a4f;
-        }
-        .result-box {
-            margin-top: 15px;
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .btn {
-            width: 100%;
-            padding: 12px;
-            margin-top: 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            border: none;
-        }
-        .view-rank {
-            background-color: #1b4332;
-            color: white;
-        }
-        .restart {
-            background-color: #d90429;
-            color: white;
-        }
-    </style>
+    <title>Weekly Carbon Footprint Results</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
 </head>
 <body>
-
     <div class="container">
-        <h2>🌎 Weekly Carbon Footprint Report</h2>
+        <h2>Your Weekly Carbon Footprint Report</h2>
+        
+        <p><strong>Total Weekly Footprint:</strong> <span id="weeklyTotal">0.00</span> kg CO2</p>
+        <p><strong>Average Weekly Footprint:</strong> 100 kg CO2 (for comparison)</p>
+        <p id="comparisonMessage"></p>
 
-        <div class="result-box">
-            <b>Total Weekly Carbon Footprint:</b> <span id="totalFootprint">Calculating...</span> kg CO2
-        </div>
+        <h3>💡 Suggestions to Reduce Your Carbon Footprint</h3>
+        <ul id="tipsList">
+            <!-- Tips will be generated here -->
+        </ul>
 
-        <div class="result-box">
-            <b>Breakdown per day:</b>
-            <ul id="breakdown"></ul>
-        </div>
-
-        <div id="tips" class="result-box"></div>
-
-        <button class="btn view-rank" onclick="viewRank()">View Your Rank</button>
-        <button class="btn restart" onclick="restartWeek()">Restart New Week</button>
+        <button onclick="window.location.href='ranking.html'">View Your Rank</button>
+        <button onclick="restartWeek()">Restart New Week</button>
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             let totalFootprint = 0;
-            let breakdownList = document.getElementById("breakdown");
-            const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+            let highestCategory = "";
+            let categories = {
+                transport: 0,
+                plastic: 0,
+                electricity: 0,
+                diet: 0
+            };
 
+            // Retrieve and sum up the week's data
+            let days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
             days.forEach(day => {
-                let storedValue = localStorage.getItem(day);
-                let dailyValue = storedValue ? parseFloat(storedValue) : 0;
+                let savedData = localStorage.getItem(day);
+                if (savedData) {
+                    let parsedData = JSON.parse(savedData);
+                    totalFootprint += parsedData.total;
 
-                // Debugging: Log each day's value
-                console.log(`${day}: ${dailyValue} kg CO2`);
-
-                totalFootprint += dailyValue;
-
-                // Add to breakdown list
-                let listItem = document.createElement("li");
-                listItem.textContent = `${day.charAt(0).toUpperCase() + day.slice(1)}: ${dailyValue.toFixed(2)} kg CO2`;
-                breakdownList.appendChild(listItem);
+                    // Track highest category
+                    categories.transport += parsedData.transport;
+                    categories.plastic += parsedData.plastic;
+                    categories.electricity += parsedData.electricity;
+                    categories.diet += parsedData.diet;
+                }
             });
 
-            totalFootprint = totalFootprint.toFixed(2);
-            document.getElementById("totalFootprint").innerText = totalFootprint + " kg CO2";
+            // Find the biggest contributor
+            highestCategory = Object.keys(categories).reduce((a, b) => categories[a] > categories[b] ? a : b);
 
-            // Compare with the global average (which is around 49 kg CO2 per week per person)
-            let averageFootprint = 49;
-            let tipsBox = document.getElementById("tips");
+            // Display total footprint
+            document.getElementById("weeklyTotal").textContent = totalFootprint.toFixed(2);
 
-            if (totalFootprint < averageFootprint * 0.5) {
-                tipsBox.innerHTML = "✅ Your footprint is **low**! Keep up the great eco-friendly habits! 🌱";
-            } else if (totalFootprint < averageFootprint) {
-                tipsBox.innerHTML = "⚠️ Your footprint is **moderate**. Consider reducing plastic use and switching to public transport.";
+            // Compare with average footprint
+            let comparisonMessage = document.getElementById("comparisonMessage");
+            if (totalFootprint > 100) {
+                comparisonMessage.innerHTML = "🚨 Your footprint is higher than the average person. Consider making changes!";
+                comparisonMessage.style.color = "red";
             } else {
-                tipsBox.innerHTML = "❌ Your footprint is **high**! Try using renewable energy, carpooling, or eating less meat. 🌍";
+                comparisonMessage.innerHTML = "✅ Your footprint is lower than the average person. Well done!";
+                comparisonMessage.style.color = "green";
             }
 
-            // Debugging: Log the final total
-            console.log("Final Total Weekly Footprint:", totalFootprint);
+            // Generate tips
+            let tipsList = document.getElementById("tipsList");
+            let tips = {
+                transport: "Consider using public transport, carpooling, or biking instead of driving.",
+                plastic: "Reduce plastic use by switching to reusable bottles and containers.",
+                electricity: "Lower electricity consumption by using energy-efficient appliances and turning off unused devices.",
+                diet: "Reduce meat consumption and include more plant-based meals in your diet."
+            };
+
+            let tipItem = document.createElement("li");
+            tipItem.textContent = tips[highestCategory];
+            tipsList.appendChild(tipItem);
         });
 
-        function viewRank() {
-            window.location.href = "rank.html";  // Goes to the ranking page
-        }
-
         function restartWeek() {
-            if (confirm("Are you sure you want to start a new week? This will erase all saved data.")) {
-                localStorage.clear();
-                window.location.href = "monday.html";  // Restart the tracker from Monday
-            }
+            localStorage.clear();
+            window.location.href = "monday.html";
         }
     </script>
-
 </body>
 </html>
