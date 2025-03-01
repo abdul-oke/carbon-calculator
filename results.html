@@ -10,52 +10,56 @@
     <div class="container">
         <h2>🌍 Weekly Carbon Footprint Report</h2>
         <p>Your total carbon footprint for the week:</p>
-        <h3 id="totalFootprint">0.00 kg CO2</h3>
+        <h3 id="totalFootprint">Loading...</h3>
 
         <!-- Tips Section -->
         <h3>🌱 Tips to Reduce Your Carbon Footprint:</h3>
         <ul id="tipsList"></ul>
 
-        <!-- Button to View Rank -->
+        <!-- View Rank Button -->
         <button onclick="viewRank()">View Your Rank</button>
     </div>
 
     <script>
-        // List of days
-        const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
-        let totalFootprint = 0;
+        document.addEventListener("DOMContentLoaded", function() {
+            let totalFootprint = 0;
+            const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 
-        // Retrieve each day's footprint from localStorage
-        days.forEach(day => {
-            let dailyValue = parseFloat(localStorage.getItem(day) || "0");
-            console.log(`Day: ${day}, Footprint: ${dailyValue}`); // Debugging line
-            totalFootprint += dailyValue;
+            // Retrieve and sum up the daily footprints
+            days.forEach(day => {
+                let dailyValue = parseFloat(localStorage.getItem(day)) || 0;
+                console.log(`Day: ${day}, Footprint: ${dailyValue}`); // Debugging
+                totalFootprint += dailyValue;
+            });
+
+            console.log("Total Weekly Footprint:", totalFootprint); // Debugging
+
+            // Display the correct total
+            document.getElementById("totalFootprint").innerText = totalFootprint.toFixed(2) + " kg CO2";
+
+            // Generate and show tips based on footprint
+            generateTips(totalFootprint);
         });
 
-        console.log("Total Weekly Footprint:", totalFootprint); // Debugging line
+        function generateTips(total) {
+            let tips = [];
+            if (total > 100) tips.push("🚲 Use public transport, walk, or cycle more.");
+            if (total > 80) tips.push("💡 Reduce electricity usage by switching to LED bulbs.");
+            if (total > 60) tips.push("🥦 Reduce red meat consumption to lower food-related emissions.");
+            if (total > 40) tips.push("♻️ Try reusing and recycling materials to reduce waste.");
 
-        // Display total footprint
-        document.getElementById("totalFootprint").innerText = totalFootprint.toFixed(2) + " kg CO2";
-
-        // Generate Tips
-        let tips = [];
-        if (totalFootprint > 100) tips.push("🚲 Use public transport, walk, or cycle more.");
-        if (totalFootprint > 80) tips.push("💡 Reduce electricity usage by switching to LED bulbs.");
-        if (totalFootprint > 60) tips.push("🥦 Reduce red meat consumption to lower food-related emissions.");
-        if (totalFootprint > 40) tips.push("♻️ Try reusing and recycling materials to reduce waste.");
-
-        let tipsList = document.getElementById("tipsList");
-        if (tips.length === 0) {
-            tipsList.innerHTML = "<li>🎉 You're already doing great!</li>";
-        } else {
-            tips.forEach(tip => {
-                let li = document.createElement("li");
-                li.innerText = tip;
-                tipsList.appendChild(li);
-            });
+            let tipsList = document.getElementById("tipsList");
+            if (tips.length === 0) {
+                tipsList.innerHTML = "<li>🎉 You're already doing great!</li>";
+            } else {
+                tips.forEach(tip => {
+                    let li = document.createElement("li");
+                    li.innerText = tip;
+                    tipsList.appendChild(li);
+                });
+            }
         }
 
-        // Navigate to rank page
         function viewRank() {
             window.location.href = "rank.html";
         }
