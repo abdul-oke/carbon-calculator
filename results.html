@@ -55,6 +55,11 @@
             <b>Total Weekly Carbon Footprint:</b> <span id="totalFootprint">Calculating...</span> kg CO2
         </div>
 
+        <div class="result-box">
+            <b>Breakdown per day:</b>
+            <ul id="breakdown"></ul>
+        </div>
+
         <div id="tips" class="result-box"></div>
 
         <button class="btn view-rank" onclick="viewRank()">View Your Rank</button>
@@ -64,12 +69,22 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             let totalFootprint = 0;
+            let breakdownList = document.getElementById("breakdown");
             const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 
             days.forEach(day => {
                 let storedValue = localStorage.getItem(day);
                 let dailyValue = storedValue ? parseFloat(storedValue) : 0;
+
+                // Debugging: Log each day's value
+                console.log(`${day}: ${dailyValue} kg CO2`);
+
                 totalFootprint += dailyValue;
+
+                // Add to breakdown list
+                let listItem = document.createElement("li");
+                listItem.textContent = `${day.charAt(0).toUpperCase() + day.slice(1)}: ${dailyValue.toFixed(2)} kg CO2`;
+                breakdownList.appendChild(listItem);
             });
 
             totalFootprint = totalFootprint.toFixed(2);
@@ -86,6 +101,9 @@
             } else {
                 tipsBox.innerHTML = "❌ Your footprint is **high**! Try using renewable energy, carpooling, or eating less meat. 🌍";
             }
+
+            // Debugging: Log the final total
+            console.log("Final Total Weekly Footprint:", totalFootprint);
         });
 
         function viewRank() {
