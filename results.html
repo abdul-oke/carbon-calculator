@@ -12,15 +12,12 @@
         <p>Your total carbon footprint for the week:</p>
         <h3 id="totalFootprint">0.00 kg CO2</h3>
 
-        <!-- Ranking System -->
-        <p id="rankingMessage"></p>
-
         <!-- Tips Section -->
         <h3>🌱 Tips to Reduce Your Carbon Footprint:</h3>
         <ul id="tipsList"></ul>
 
-        <!-- Restart Button -->
-        <button onclick="restartWeek()">Start a New Week</button>
+        <!-- Button to View Rank -->
+        <button onclick="viewRank()">View Your Rank</button>
     </div>
 
     <script>
@@ -36,14 +33,6 @@
 
         // Display total footprint
         document.getElementById("totalFootprint").innerText = totalFootprint.toFixed(2) + " kg CO2";
-
-        // Ranking System
-        function getRanking(total) {
-            if (total < 50) return "🌱 Eco-Warrior! You're doing amazing!";
-            if (total < 100) return "🌍 Sustainable Citizen! Keep improving.";
-            return "🚗 Heavy Emitter! Try reducing your emissions.";
-        }
-        document.getElementById("rankingMessage").innerHTML = `<strong>${getRanking(totalFootprint)}</strong>`;
 
         // Generate Tips
         let tips = [];
@@ -63,10 +52,9 @@
             });
         }
 
-        // Restart the week (Clear storage)
-        function restartWeek() {
-            localStorage.clear();
-            window.location.href = "index.html";
+        // Navigate to rank page
+        function viewRank() {
+            window.location.href = "rank.html";
         }
     </script>
 </body>

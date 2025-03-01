@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Rank</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>🏆 Your Carbon Footprint Rank</h2>
+        <p id="rankingMessage"></p>
+
+        <!-- Restart Button -->
+        <button onclick="restartWeek()">Start a New Week</button>
+    </div>
+
+    <script>
+        // Retrieve total footprint from results page
+        const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+        let totalFootprint = 0;
+        
+        days.forEach(day => {
+            let dailyValue = parseFloat(localStorage.getItem(day) || "0");
+            totalFootprint += dailyValue;
+        });
+
+        // Ranking System
+        function getRanking(total) {
+            if (total < 50) return "🌱 Eco-Warrior! You're doing amazing!";
+            if (total < 100) return "🌍 Sustainable Citizen! Keep improving.";
+            return "🚗 Heavy Emitter! Try reducing your emissions.";
+        }
+        document.getElementById("rankingMessage").innerHTML = `<strong>${getRanking(totalFootprint)}</strong>`;
+
+        // Restart the week (Clear storage)
+        function restartWeek() {
+            localStorage.clear();
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>
