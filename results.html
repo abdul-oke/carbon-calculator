@@ -4,20 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weekly Carbon Footprint Report</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #eef7f2;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #2d6a4f;
+        }
+        .result-box {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            border: none;
+        }
+        .view-rank {
+            background-color: #1b4332;
+            color: white;
+        }
+        .restart {
+            background-color: #d90429;
+            color: white;
+        }
+    </style>
 </head>
 <body>
+
     <div class="container">
-        <h2>🌍 Weekly Carbon Footprint Report</h2>
-        <p>Your total carbon footprint for the week:</p>
-        <h3 id="totalFootprint">Loading...</h3>
+        <h2>🌎 Weekly Carbon Footprint Report</h2>
 
-        <!-- Tips Section -->
-        <h3>🌱 Tips to Reduce Your Carbon Footprint:</h3>
-        <ul id="tipsList"></ul>
+        <div class="result-box">
+            <b>Total Weekly Carbon Footprint:</b> <span id="totalFootprint">Calculating...</span> kg CO2
+        </div>
 
-        <!-- View Rank Button -->
-        <button onclick="viewRank()">View Your Rank</button>
+        <div id="tips" class="result-box"></div>
+
+        <button class="btn view-rank" onclick="viewRank()">View Your Rank</button>
+        <button class="btn restart" onclick="restartWeek()">Restart New Week</button>
     </div>
 
     <script>
@@ -25,44 +66,39 @@
             let totalFootprint = 0;
             const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 
-            // Retrieve and sum up the daily footprints
             days.forEach(day => {
-                let dailyValue = parseFloat(localStorage.getItem(day)) || 0;
-                console.log(`Day: ${day}, Footprint: ${dailyValue}`); // Debugging
+                let storedValue = localStorage.getItem(day);
+                let dailyValue = storedValue ? parseFloat(storedValue) : 0;
                 totalFootprint += dailyValue;
             });
 
-            console.log("Total Weekly Footprint:", totalFootprint); // Debugging
+            totalFootprint = totalFootprint.toFixed(2);
+            document.getElementById("totalFootprint").innerText = totalFootprint + " kg CO2";
 
-            // Display the correct total
-            document.getElementById("totalFootprint").innerText = totalFootprint.toFixed(2) + " kg CO2";
+            // Compare with the global average (which is around 49 kg CO2 per week per person)
+            let averageFootprint = 49;
+            let tipsBox = document.getElementById("tips");
 
-            // Generate and show tips based on footprint
-            generateTips(totalFootprint);
+            if (totalFootprint < averageFootprint * 0.5) {
+                tipsBox.innerHTML = "✅ Your footprint is **low**! Keep up the great eco-friendly habits! 🌱";
+            } else if (totalFootprint < averageFootprint) {
+                tipsBox.innerHTML = "⚠️ Your footprint is **moderate**. Consider reducing plastic use and switching to public transport.";
+            } else {
+                tipsBox.innerHTML = "❌ Your footprint is **high**! Try using renewable energy, carpooling, or eating less meat. 🌍";
+            }
         });
 
-        function generateTips(total) {
-            let tips = [];
-            if (total > 100) tips.push("🚲 Use public transport, walk, or cycle more.");
-            if (total > 80) tips.push("💡 Reduce electricity usage by switching to LED bulbs.");
-            if (total > 60) tips.push("🥦 Reduce red meat consumption to lower food-related emissions.");
-            if (total > 40) tips.push("♻️ Try reusing and recycling materials to reduce waste.");
+        function viewRank() {
+            window.location.href = "rank.html";  // Goes to the ranking page
+        }
 
-            let tipsList = document.getElementById("tipsList");
-            if (tips.length === 0) {
-                tipsList.innerHTML = "<li>🎉 You're already doing great!</li>";
-            } else {
-                tips.forEach(tip => {
-                    let li = document.createElement("li");
-                    li.innerText = tip;
-                    tipsList.appendChild(li);
-                });
+        function restartWeek() {
+            if (confirm("Are you sure you want to start a new week? This will erase all saved data.")) {
+                localStorage.clear();
+                window.location.href = "monday.html";  // Restart the tracker from Monday
             }
         }
-
-        function viewRank() {
-            window.location.href = "rank.html";
-        }
     </script>
+
 </body>
 </html>
