@@ -25,11 +25,14 @@
         const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
         let totalFootprint = 0;
 
-        // Retrieve each day's footprint and add to total
+        // Retrieve each day's footprint from localStorage
         days.forEach(day => {
             let dailyValue = parseFloat(localStorage.getItem(day) || "0");
+            console.log(`Day: ${day}, Footprint: ${dailyValue}`); // Debugging line
             totalFootprint += dailyValue;
         });
+
+        console.log("Total Weekly Footprint:", totalFootprint); // Debugging line
 
         // Display total footprint
         document.getElementById("totalFootprint").innerText = totalFootprint.toFixed(2) + " kg CO2";
