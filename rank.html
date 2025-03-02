@@ -3,16 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Rank</title>
+    <title>Ranking - Carbon Footprint</title>
     <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
 </head>
 <body>
     <div class="container">
-        <h2>🏆 Your Carbon Footprint Rank</h2>
-        <p><strong>Your Weekly Footprint:</strong> <span id="weeklyFootprint">0.00</span> kg CO2</p>
-        <p><strong>Your Rank:</strong> <span id="rank"></span></p>
-        <button onclick="restartWeek()">Restart Week</button>
+        <h2>🌍 Your Carbon Footprint Ranking</h2>
+        
+        <p><strong>Total Weekly Carbon Footprint:</strong> <span id="totalFootprint">0.00</span> kg CO₂</p>
+        <p><strong>Your Rank:</strong> <span id="rank">Calculating...</span></p>
+
+        <div id="rank-message"></div>
+
+        <button onclick="restartTracking()">🔄 Start a New Week</button>
     </div>
+
+    <script>
+        // Function to display total footprint and rank
+        function displayRank() {
+            let total = localStorage.getItem('weeklyTotal') || "0.00";
+            document.getElementById('totalFootprint').textContent = total + " kg CO₂";
+
+            let footprint = parseFloat(total);
+
+            let rank = "";
+            let message = "";
+
+            if (footprint <= 50) {
+                rank = "🌱 Eco-Warrior";
+                message = "Amazing! You have a very low carbon footprint. Keep up the great work!";
+            } else if (footprint <= 100) {
+                rank = "🌿 Climate Conscious";
+                message = "You're doing well, but there's room for improvement! Consider reducing plastic use and energy consumption.";
+            } else if (footprint <= 150) {
+                rank = "⚡ Average Person";
+                message = "Your footprint is around the global average. Small changes can make a big difference!";
+            } else {
+                rank = "🔥 High Carbon Emitter";
+                message = "Your carbon footprint is quite high. Try cutting down on car travel, using less electricity, and eating more plant-based meals.";
+            }
+
+            document.getElementById('rank').textContent = rank;
+            document.getElementById('rank-message').innerHTML = `<p>${message}</p>`;
+        }
+
+        // Call the function when the page loads
+        window.onload = displayRank;
+
+        // Function to reset tracking
+        function restartTracking() {
+            localStorage.clear();
+            window.location.href = "monday.html"; // Redirect to Monday to start again
+        }
+    </script>
 </body>
 </html>
