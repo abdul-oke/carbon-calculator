@@ -23,7 +23,12 @@
         function displayRank() {
             let total = parseFloat(localStorage.getItem('weeklyTotal') || "0");
 
-            // Display total
+            // If total is not stored correctly, reload it
+            if (isNaN(total)) {
+                total = 0;
+            }
+
+            // Display the correct total
             document.getElementById('totalFootprint').textContent = total.toFixed(2) + " kg CO₂";
 
             let rank = "";
