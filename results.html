@@ -3,22 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weekly Results</title>
+    <title>Results - Carbon Footprint</title>
     <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
 </head>
 <body>
     <div class="container">
-        <h2>📊 Weekly Carbon Footprint Report</h2>
-        <p><strong>Total Weekly Footprint:</strong> <span id="weeklyTotal">0.00</span> kg CO2</p>
-        <p><strong>Average Weekly Footprint:</strong> 100 kg CO2</p>
-        <p id="comparisonMessage"></p>
+        <h2>📊 Your Weekly Carbon Footprint</h2>
 
-        <h3>💡 Suggestions</h3>
-        <ul id="tipsList"></ul>
+        <p><strong>Total Weekly Carbon Footprint:</strong> <span id="weeklyTotal">0.00</span> kg CO₂</p>
 
-        <button onclick="window.location.href='rank.html'">View Your Rank</button>
-        <button onclick="restartWeek()">Restart</button>
+        <h3>🌱 How Can You Improve?</h3>
+        <div id="tips"></div>
+
+        <button onclick="goToRanking()">📈 View Your Rank</button>
     </div>
+
+    <script>
+        // Function to display total weekly footprint
+        function displayWeeklyTotal() {
+            let total = 0;
+
+            // Sum up daily footprints from localStorage
+            for (let day of ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]) {
+                total += parseFloat(localStorage.getItem(day) || "0");
+            }
+
+            // Save total in localStorage
+            localStorage.setItem("weeklyTotal", total.toFixed(2));
+
+            // Display total
+            document.getElementById("weeklyTotal").textContent = total.toFixed(2) + " kg CO₂";
+
+            // Show improvement tips
+            showTips(total);
+        }
+
+        // Function to show tips based on footprint
+        function showTips(total) {
+            let tips = document.getElementById("tips");
+            let advice = "";
+
+            if (total <= 50) {
+                advice = "✅ You're an Eco-Warrior! Keep up the sustainable habits!";
+            } else if (total <= 100) {
+                advice = "♻️ Great effort! Try reducing single-use plastics and optimizing energy use.";
+            } else if (total <= 150) {
+                advice = "🌎 You're around the average. Consider using public transport more and reducing meat consumption.";
+            } else {
+                advice = "⚠️ Your footprint is high! Try carpooling, using renewable energy, and eating less meat.";
+            }
+
+            tips.innerHTML = `<p>${advice}</p>`;
+        }
+
+        // Function to go to ranking page
+        function goToRanking() {
+            window.location.href = "rank.html";
+        }
+
+        // Load weekly total on page load
+        window.onload = displayWeeklyTotal;
+    </script>
 </body>
 </html>

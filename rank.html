@@ -9,8 +9,8 @@
 </head>
 <body>
     <div class="container">
-        <h2>🌍 Your Carbon Footprint Ranking</h2>
-        
+        <h2>🏆 Your Carbon Footprint Rank</h2>
+
         <p><strong>Total Weekly Carbon Footprint:</strong> <span id="totalFootprint">0.00</span> kg CO₂</p>
         <p><strong>Your Rank:</strong> <span id="rank">Calculating...</span></p>
 
@@ -20,41 +20,38 @@
     </div>
 
     <script>
-        // Function to display total footprint and rank
         function displayRank() {
-            let total = localStorage.getItem('weeklyTotal') || "0.00";
-            document.getElementById('totalFootprint').textContent = total + " kg CO₂";
+            let total = parseFloat(localStorage.getItem('weeklyTotal') || "0");
 
-            let footprint = parseFloat(total);
+            // Display total
+            document.getElementById('totalFootprint').textContent = total.toFixed(2) + " kg CO₂";
 
             let rank = "";
             let message = "";
 
-            if (footprint <= 50) {
+            if (total <= 50) {
                 rank = "🌱 Eco-Warrior";
-                message = "Amazing! You have a very low carbon footprint. Keep up the great work!";
-            } else if (footprint <= 100) {
+                message = "You're a sustainability champion!";
+            } else if (total <= 100) {
                 rank = "🌿 Climate Conscious";
-                message = "You're doing well, but there's room for improvement! Consider reducing plastic use and energy consumption.";
-            } else if (footprint <= 150) {
+                message = "You're doing well! Keep reducing waste and energy use.";
+            } else if (total <= 150) {
                 rank = "⚡ Average Person";
-                message = "Your footprint is around the global average. Small changes can make a big difference!";
+                message = "Not bad! Try adopting greener habits.";
             } else {
                 rank = "🔥 High Carbon Emitter";
-                message = "Your carbon footprint is quite high. Try cutting down on car travel, using less electricity, and eating more plant-based meals.";
+                message = "Your footprint is high! Time to make eco-friendly changes.";
             }
 
             document.getElementById('rank').textContent = rank;
             document.getElementById('rank-message').innerHTML = `<p>${message}</p>`;
         }
 
-        // Call the function when the page loads
         window.onload = displayRank;
 
-        // Function to reset tracking
         function restartTracking() {
             localStorage.clear();
-            window.location.href = "monday.html"; // Redirect to Monday to start again
+            window.location.href = "monday.html";
         }
     </script>
 </body>
