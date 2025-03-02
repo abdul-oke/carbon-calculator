@@ -3,88 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weekly Carbon Footprint Results</title>
+    <title>Weekly Results</title>
     <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
 </head>
 <body>
     <div class="container">
-        <h2>Your Weekly Carbon Footprint Report</h2>
-        
+        <h2>📊 Weekly Carbon Footprint Report</h2>
         <p><strong>Total Weekly Footprint:</strong> <span id="weeklyTotal">0.00</span> kg CO2</p>
-        <p><strong>Average Weekly Footprint:</strong> 100 kg CO2 (for comparison)</p>
+        <p><strong>Average Weekly Footprint:</strong> 100 kg CO2</p>
         <p id="comparisonMessage"></p>
 
-        <h3>💡 Suggestions to Reduce Your Carbon Footprint</h3>
-        <ul id="tipsList">
-            <!-- Tips will be generated here -->
-        </ul>
+        <h3>💡 Suggestions</h3>
+        <ul id="tipsList"></ul>
 
-        <button onclick="window.location.href='ranking.html'">View Your Rank</button>
-        <button onclick="restartWeek()">Restart New Week</button>
+        <button onclick="window.location.href='rank.html'">View Your Rank</button>
+        <button onclick="restartWeek()">Restart</button>
     </div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            let totalFootprint = 0;
-            let highestCategory = "";
-            let categories = {
-                transport: 0,
-                plastic: 0,
-                electricity: 0,
-                diet: 0
-            };
-
-            // Retrieve and sum up the week's data
-            let days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-            days.forEach(day => {
-                let savedData = localStorage.getItem(day);
-                if (savedData) {
-                    let parsedData = JSON.parse(savedData);
-                    totalFootprint += parsedData.total;
-
-                    // Track highest category
-                    categories.transport += parsedData.transport;
-                    categories.plastic += parsedData.plastic;
-                    categories.electricity += parsedData.electricity;
-                    categories.diet += parsedData.diet;
-                }
-            });
-
-            // Find the biggest contributor
-            highestCategory = Object.keys(categories).reduce((a, b) => categories[a] > categories[b] ? a : b);
-
-            // Display total footprint
-            document.getElementById("weeklyTotal").textContent = totalFootprint.toFixed(2);
-
-            // Compare with average footprint
-            let comparisonMessage = document.getElementById("comparisonMessage");
-            if (totalFootprint > 100) {
-                comparisonMessage.innerHTML = "🚨 Your footprint is higher than the average person. Consider making changes!";
-                comparisonMessage.style.color = "red";
-            } else {
-                comparisonMessage.innerHTML = "✅ Your footprint is lower than the average person. Well done!";
-                comparisonMessage.style.color = "green";
-            }
-
-            // Generate tips
-            let tipsList = document.getElementById("tipsList");
-            let tips = {
-                transport: "Consider using public transport, carpooling, or biking instead of driving.",
-                plastic: "Reduce plastic use by switching to reusable bottles and containers.",
-                electricity: "Lower electricity consumption by using energy-efficient appliances and turning off unused devices.",
-                diet: "Reduce meat consumption and include more plant-based meals in your diet."
-            };
-
-            let tipItem = document.createElement("li");
-            tipItem.textContent = tips[highestCategory];
-            tipsList.appendChild(tipItem);
-        });
-
-        function restartWeek() {
-            localStorage.clear();
-            window.location.href = "monday.html";
-        }
-    </script>
 </body>
 </html>
