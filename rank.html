@@ -23,33 +23,33 @@
         function displayRank() {
             let total = parseFloat(localStorage.getItem('weeklyTotal') || "0");
 
-            // If total is not stored correctly, reload it
-            if (isNaN(total)) {
-                total = 0;
-            }
-
-            // Display the correct total
             document.getElementById('totalFootprint').textContent = total.toFixed(2) + " kg CO₂";
 
             let rank = "";
             let message = "";
+            let bgColor = "";
 
             if (total <= 50) {
                 rank = "🌱 Eco-Warrior";
                 message = "You're a sustainability champion!";
+                bgColor = "#ccffcc"; 
             } else if (total <= 100) {
                 rank = "🌿 Climate Conscious";
                 message = "You're doing well! Keep reducing waste and energy use.";
+                bgColor = "#ffffcc";
             } else if (total <= 150) {
                 rank = "⚡ Average Person";
                 message = "Not bad! Try adopting greener habits.";
+                bgColor = "#ffe0b3";
             } else {
                 rank = "🔥 High Carbon Emitter";
                 message = "Your footprint is high! Time to make eco-friendly changes.";
+                bgColor = "#ffcccc";
             }
 
             document.getElementById('rank').textContent = rank;
             document.getElementById('rank-message').innerHTML = `<p>${message}</p>`;
+            document.body.style.backgroundColor = bgColor;
         }
 
         window.onload = displayRank;
